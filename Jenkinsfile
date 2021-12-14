@@ -46,7 +46,7 @@ pipeline {
 
     stage('Anchore analyse') {
       steps {
-        writeFile file: 'anchore_images', text: 'docker.io/maartensmeets/spring-boot-demo'
+        writeFile file: 'anchore_images', text: 'docker.io/nvmh0103/spring-boot-demo'
         anchore name: 'anchore_images'
       }
     }
