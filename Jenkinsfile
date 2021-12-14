@@ -1,11 +1,18 @@
 pipeline {
   agent any
+   environment {
+        PROJECT_ID = 'kubernetes-331801'
+        LOCATION = 'asia-southeast1-a'
+        CREDENTIALS_ID = 'Kubernetes'
+        CLUSTER_NAME = 'ltat'          
+    }
 
   tools {
     jdk 'jdk-11'
     maven 'mvn-3.6.3'
   }
-
+  
+  
   stages {
     stage('Build') {
       steps {
@@ -51,14 +58,10 @@ pipeline {
 //       }
 //     }
 
-    stage('Deploy to K8s') {
+     stage('Deploy to GKE') {
       steps {
-        withKubeConfig([credentialsId: 'kubernetes-config']) {
-          sh 'curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"'
-          sh 'chmod u+x ./kubectl'
-          sh './kubectl apply -f k8s.yaml'
-        }
-      } 
-    }
+       step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'k8s.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
+       }
+     }
   }
 }
