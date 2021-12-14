@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class DemoRestController {
-    @GetMapping("/rest/demo")
+    @GetMapping("/")
     //Returning is List is supported with JSON response only
     //If you want XML, then add a wrapper class as Root XML element, for example EmployeeList
     public String demoReply() {
