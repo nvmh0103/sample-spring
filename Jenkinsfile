@@ -63,5 +63,10 @@ pipeline {
        step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'k8s.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
        }
      }
+    stage ("Dynamic Analysis - DAST with OWASP ZAP") {
+			steps {
+				sh "docker run -t owasp/zap2docker-stable zap-baseline.py -t http://34.124.220.225/ || true"
+			}
+		}
   }
 }
